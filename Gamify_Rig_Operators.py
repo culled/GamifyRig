@@ -117,20 +117,23 @@ class GamifyRigOperator(bpy.types.Operator):
     bl_idname = "object.gamify_rig_operator"
     bl_label = "Rigify to Gamify Rig"
 
-    gamifyRigName: StringProperty(default="Gamify_Rig")  
-
     @classmethod
     def poll(cls, context):
         return context.active_object is not None and context.object.type == 'ARMATURE'
 
     def execute(self, context):
         rigify_armature_obj = context.active_object
+        properties = context.object.gamify_rig_properties
     
         if(rigify_armature_obj is None or rigify_armature_obj.type != 'ARMATURE'):
             self.report({'ERROR'}, "Please select an Armature object.")
             return { 'CANCELLED'}
+
+        if(properties.rig_name is None or properties.rig_name == ""):
+            self.report({'ERROR'}, "Please enter a name for the new rig.")
+            return { 'CANCELLED'}
         
-        armature_obj = create_armature(self.gamifyRigName, context)
+        armature_obj = create_armature(properties.rig_name, context)
         
         #Select and enter edit mode on the new armature
         armature_obj.select_set(True)
@@ -139,8 +142,9 @@ class GamifyRigOperator(bpy.types.Operator):
         
         create_bone_structure(rigify_armature_obj.data, armature_obj.data)
         
-        bpy.ops.object.mode_set(mode='POSE', toggle=False)
-        create_constraints(rigify_armature_obj, armature_obj)
+        if properties.create_constraints:
+            bpy.ops.object.mode_set(mode='POSE', toggle=False)
+            create_constraints(rigify_armature_obj, armature_obj)
         
         bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
         return {'FINISHED'}
