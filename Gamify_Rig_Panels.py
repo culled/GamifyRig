@@ -15,8 +15,9 @@ class GamifyRigPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         
-        row = layout.row()
-        row.operator("object.gamify_rig_operator", icon='ARMATURE_DATA')
+        layout.prop(context.object.gamify_rig_properties, "rig_name")
+        layout.prop(context.object.gamify_rig_properties, "create_constraints")
+        layout.operator("object.gamify_rig_operator", icon='ARMATURE_DATA')
 
 def register():
     bpy.utils.register_class(GamifyRigPanel)

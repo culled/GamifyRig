@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Gamify Rig",
     "author": "Cullen Dallas",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "blender": (2, 80, 0),
     "location": "Properties > Object Data",
     "description": "Creates a simplified version of a rigify rig for use in game engines",
@@ -12,8 +12,9 @@ bl_info = {
 
 from . import Gamify_Rig_Operators
 from . import Gamify_Rig_Panels
+from . import Gamify_Rig_Properties
 
-modules = [Gamify_Rig_Operators, Gamify_Rig_Panels]
+modules = [Gamify_Rig_Operators, Gamify_Rig_Panels, Gamify_Rig_Properties]
 
 def register():
     for module in modules:
